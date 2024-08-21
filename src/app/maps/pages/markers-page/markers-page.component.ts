@@ -77,8 +77,6 @@ export class MarkersPageComponent {
     this.saveToLocalStorage();
 
     marker.on('dragend', () => this.saveToLocalStorage() );
-
-    // dragend
   }
 
   deleteMarker( index: number ) {
@@ -110,7 +108,7 @@ export class MarkersPageComponent {
 
   readFromLocalStorage() {
     const plainMarkersString = localStorage.getItem('plainMarkers') ?? '[]';
-    const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString ); //! OJO!
+    const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString ); //!Ojo!
 
     plainMarkers.forEach( ({ color, lngLat }) => {
       const [ lng, lat ] = lngLat;

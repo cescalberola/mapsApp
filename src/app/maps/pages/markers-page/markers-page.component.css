@@ -10,9 +10,11 @@
   cursor: pointer;
 }
 
-
 .favorite-button {
   position: fixed;
   bottom: 30px;
   right: 20px;
+}
+.btn-outline-light{
+  margin-left: 15px;
 }

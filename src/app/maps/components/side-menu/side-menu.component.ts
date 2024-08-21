@@ -13,10 +13,9 @@ interface MenuItem {
 export class SideMenuComponent {
 
   public menuItems: MenuItem[] = [
-    { route: 'fullscreen', name: 'FullScreen' },
-    { route: 'zoom-range', name: 'Zoom Range' },
-    { route: 'markers',    name: 'Markers' },
-    { route: 'properties', name: 'Favorites' },
+    { route: 'fullscreen', name: 'Pantalla Completa' },
+    { route: 'markers',    name: 'Marcadores' },
+    { route: 'properties', name: 'Favoritos' },
   ];
 
 }

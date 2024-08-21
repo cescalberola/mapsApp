@@ -46,7 +46,7 @@ export class MarkersPageComponent {
 
 
   openMarkerModal() {
-    this.newMarkerLabel = '';  // Reinicia el nombre del marcador
+    this.newMarkerLabel = '';
     const modalElement = document.getElementById('markerNameModal');
     if (modalElement) {
       const modal = new bootstrap.Modal(modalElement);
@@ -78,17 +78,22 @@ export class MarkersPageComponent {
       .setLngLat( lngLat )
       .addTo( this.map );
 
-    this.markers.push({ color, marker,label, editing: false });
+    this.markers.push({ color, marker, label, editing: false });
     this.saveToLocalStorage();
 
     marker.on('dragend', () => this.saveToLocalStorage() );
   }
 
-  // deleteMarker( index: number ) {
-  //   this.markers[index].marker.remove();
-  //   this.markers.splice( index, 1 );
-  //   this.saveToLocalStorage();
-  // }
+  deleteMarker( index: number ) {
+    this.markers[index].marker.remove();
+    this.markers.splice( index, 1 );
+    this.saveToLocalStorage();
+  }
+  addFavorites( index: number ) {
+    this.markers[index].marker.remove();
+    this.markers.splice( index, 1 );
+    this.saveToLocalStorage();
+  }
 
   flyTo( marker: Marker ) {
 

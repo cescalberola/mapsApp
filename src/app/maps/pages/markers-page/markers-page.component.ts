@@ -4,11 +4,14 @@ import { Map, LngLat, Marker } from 'mapbox-gl';
 interface MarkerAndColor {
   color: string;
   marker: Marker;
+  label: string;
+  editing: boolean;
 }
 
 interface PlainMarker {
   color: string;
-  lngLat: number[]
+  lngLat: number[];
+  label: string;
 }
 
 
@@ -21,11 +24,9 @@ export class MarkersPageComponent {
   @ViewChild('map') divMap?: ElementRef;
 
   public markers: MarkerAndColor[] = [];
-
-
   public map?: Map;
   public currentLngLat: LngLat = new LngLat(-0.30300942518783813, 39.202142770771644);
-
+  public newMarkerLabel: string = '';
 
   ngAfterViewInit(): void {
 
@@ -41,29 +42,33 @@ export class MarkersPageComponent {
 
     this.readFromLocalStorage();
 
-    // const markerHtml = document.createElement('div');
-    // markerHtml.innerHTML = 'Marcador prueba'
-
-    // const marker = new Marker({
-    //   // color: 'red',
-    //   element: markerHtml
-    // })
-    //   .setLngLat( this.currentLngLat )
-    //   .addTo( this.map );
-
   }
 
-  createMarker() {
-    if ( !this.map ) return;
 
-    const color = '#xxxxxx'.replace(/x/g, y=>(Math.random()*16|0).toString(16));
+  openMarkerModal() {
+    this.newMarkerLabel = '';  // Reinicia el nombre del marcador
+    const modalElement = document.getElementById('markerNameModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  saveNewMarker() {
+    if (!this.map || !this.newMarkerLabel) return;
+
+    const color = '#xxxxxx'.replace(/x/g, y => (Math.random() * 16 | 0).toString(16));
     const lngLat = this.map.getCenter();
+    this.addMarker(lngLat, color, this.newMarkerLabel);
 
-    this.addMarker( lngLat, color );
+    const modalElement = document.getElementById('markerNameModal');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal?.hide();
+    }
   }
 
-
-  addMarker( lngLat: LngLat, color: string ) {
+  addMarker(lngLat: LngLat, color: string, label: string) {
     if ( !this.map ) return;
 
     const marker = new Marker({
@@ -73,16 +78,17 @@ export class MarkersPageComponent {
       .setLngLat( lngLat )
       .addTo( this.map );
 
-    this.markers.push({ color, marker, });
+    this.markers.push({ color, marker,label, editing: false });
     this.saveToLocalStorage();
 
     marker.on('dragend', () => this.saveToLocalStorage() );
   }
 
-  deleteMarker( index: number ) {
-    this.markers[index].marker.remove();
-    this.markers.splice( index, 1 );
-  }
+  // deleteMarker( index: number ) {
+  //   this.markers[index].marker.remove();
+  //   this.markers.splice( index, 1 );
+  //   this.saveToLocalStorage();
+  // }
 
   flyTo( marker: Marker ) {
 
@@ -90,15 +96,24 @@ export class MarkersPageComponent {
       zoom: 14,
       center: marker.getLngLat()
     });
+  }
 
+  enableEditing(index: number) {
+    this.markers[index].editing = true;
+  }
+
+  disableEditing(index: number) {
+    this.markers[index].editing = false;
+    this.saveToLocalStorage();
   }
 
 
   saveToLocalStorage() {
-    const plainMarkers: PlainMarker[] = this.markers.map( ({ color, marker }) => {
+    const plainMarkers: PlainMarker[] = this.markers.map( ({ color, marker, label }) => {
       return {
         color,
-        lngLat: marker.getLngLat().toArray()
+        lngLat: marker.getLngLat().toArray(),
+        label
       }
     });
 
@@ -110,11 +125,11 @@ export class MarkersPageComponent {
     const plainMarkersString = localStorage.getItem('plainMarkers') ?? '[]';
     const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString ); //!Ojo!
 
-    plainMarkers.forEach( ({ color, lngLat }) => {
+    plainMarkers.forEach( ({ color, lngLat, label }) => {
       const [ lng, lat ] = lngLat;
       const coords = new LngLat( lng, lat );
 
-      this.addMarker( coords, color );
+      this.addMarker( coords, color, label );
     })
 
   }

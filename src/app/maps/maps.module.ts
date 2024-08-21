@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { MapsRoutingModule } from './maps-routing.module';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
@@ -23,7 +24,8 @@ import { ZoomRangePageComponent } from './pages/zoom-range-page/zoom-range-page.
   ],
   imports: [
     CommonModule,
-    MapsRoutingModule
+    MapsRoutingModule,
+    FormsModule
   ]
 })
 export class MapsModule { }

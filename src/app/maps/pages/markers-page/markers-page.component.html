@@ -1,19 +1,39 @@
 
 <div id="map" #map></div>
 
-
 <ul class="list-group">
   <li *ngFor="let colorMarker of markers; let i = index"
-    [ngStyle]="{ backgroundColor:colorMarker.color}"
-    (dblclick)="deleteMarker(i)"
-    (click)="flyTo( colorMarker.marker)"
-     class="list-group-item">
-    Checkpoint {{ i + 1 }}
+    [ngStyle]="{ backgroundColor: colorMarker.color }"
+    (dblclick)="enableEditing(i)"
+    (click)="flyTo(colorMarker.marker)"
+    class="list-group-item">
+
+    <span *ngIf="!colorMarker.editing">{{ colorMarker.label }}</span>
+    <input *ngIf="colorMarker.editing" [(ngModel)]="colorMarker.label" (blur)="disableEditing(i)" (keydown.enter)="disableEditing(i)" />
   </li>
 </ul>
 
-
-
-<button (click)="createMarker()"  class="btn btn-primary">
-  + Checkpoint
+<button (click)="openMarkerModal()" class="btn btn-primary favorite-button">
+  + Favorite
 </button>
+
+<div class="modal fade" id="markerNameModal" tabindex="-1" aria-labelledby="markerNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="markerNameModalLabel">Nuevo Marcador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="markerName">Nombre del Marcador:</label>
+        <input type="text" [(ngModel)]="newMarkerLabel" id="markerName" class="form-control" placeholder="Introduce un nombre" />
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="saveNewMarker()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

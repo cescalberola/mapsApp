@@ -16,7 +16,7 @@ export class SideMenuComponent {
     { route: 'fullscreen', name: 'FullScreen' },
     { route: 'zoom-range', name: 'Zoom Range' },
     { route: 'markers',    name: 'Markers' },
-    { route: 'properties', name: 'Houses' },
+    { route: 'properties', name: 'Favorites' },
   ];
 
 }

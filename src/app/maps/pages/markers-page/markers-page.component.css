@@ -11,7 +11,7 @@
 }
 
 
-button {
+.favorite-button {
   position: fixed;
   bottom: 30px;
   right: 20px;
